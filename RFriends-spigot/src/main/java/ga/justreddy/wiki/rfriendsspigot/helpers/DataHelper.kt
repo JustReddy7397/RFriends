@@ -9,11 +9,12 @@ import org.bson.Document
 import org.bukkit.entity.Player
 import java.sql.ResultSet
 import java.sql.SQLException
-import java.util.ArrayList
 
 lateinit var dataHelper: DataHelper
 
 class DataHelper {
+
+    // TODO SQL
 
     init {
         dataHelper = this
@@ -21,7 +22,7 @@ class DataHelper {
 
     /**
      * Gets all the friends of a player
-     * @param friend the friend
+     * @param uuid The UUID of the friend
      */
 
     fun getFriends(uuid: String) : List<String> {
@@ -32,7 +33,6 @@ class DataHelper {
                 friends.addAll(document.getList("friends", String::class.java))
             }
         }else{
-
             val friendsRaw: String = getFriendListRaw(uuid)
             if(friendsRaw.isNotEmpty()) {
                 val friendies: List<String> = friendsRaw.split(";")
@@ -46,7 +46,8 @@ class DataHelper {
     // Stuff for one friend
 
     /**
-     * @param friend the friend
+     * Gets the name of the friend
+     * @param uuid The UUID of the friend
      */
     fun getName(uuid: String) : String {
         if(plugin.isMongoConnected) {
@@ -55,11 +56,15 @@ class DataHelper {
                 return document.getString("name")
             }
         }else{
-            val rs: ResultSet = databaseManager.getResult("SELECT * FROM friends WHERE UUID='${uuid}'")
-
+            return get("*", "friends", "UUID", uuid, "NAME") as String
         }
         return ""
     }
+
+    /**
+     * Checks if the friend is online or not
+     * @param uuid The UUID of the friend
+     */
 
     fun isOnline(uuid: String) : Boolean {
 
@@ -67,10 +72,15 @@ class DataHelper {
             val document: Document = mongoHelper.getDatabase("friends").find(Document("uuid", uuid)).first()
                 ?: return false
             return document.getBoolean("online")
+        }else{
+            return get("*", "friends", "UUID", uuid, "ONLINE")?.equals("true") ?: false
         }
-
-        return false
     }
+
+    /**
+     * Gets the friendcount of a friend
+     * @param uuid The UUID of the friend
+     */
 
     fun getFriendCount(uuid: String) : Int {
 
@@ -79,10 +89,32 @@ class DataHelper {
                 ?: return 0
             return document.getInteger("count")
         }else{
-
+            return get("*", "friends", "UUID", uuid, "COUNT") as Int
         }
 
-        return 0
+    }
+
+    /**
+     * Toggle the status from online to offline and offline to online
+     * @param uuid The UUID of the friend
+     */
+
+    fun toggleStatus(uuid: String) {
+
+        if(plugin.isMongoConnected) {
+            if(isOnline(uuid)){
+                mongoHelper.getDatabase("friends").updateOne(Filters.eq("uuid", uuid), Updates.set("online", false));
+            }else{
+                mongoHelper.getDatabase("friends").updateOne(Filters.eq("uuid", uuid), Updates.set("online", true));
+            }
+        }else{
+            if(isOnline(uuid)){
+                update("friends", "ONLINE", "false", "UUID", uuid)
+            }else{
+                update("friends", "ONLINE", "true", "UUID", uuid)
+            }
+        }
+
     }
 
 
@@ -105,7 +137,7 @@ class DataHelper {
                     .append("allowfriendrequests", true)
             )
         }else{
-            if(!exists(player)) databaseManager.update("UPDATE friends SET NAME='${player.name}' WHERE UUID='${player.uniqueId}'")
+            if(!exists(player.uniqueId.toString())) databaseManager.update("UPDATE friends SET NAME='${player.name}' WHERE UUID='${player.uniqueId}'")
             else databaseManager.update("INSERT INTO friends (UUID, NAME, FRIENDS, COUNT, ONLINE, ALLOWFRIENDREQUESTS)" +
                     " VALUES " +
                     "('${player.uniqueId}', '${player.name}', '"+""+"', '${0}', '${true}', '${true}')")
@@ -116,31 +148,37 @@ class DataHelper {
     // Sql Stuff
 
     private fun getFriendListRaw(uuid: String) : String {
+        return get("*", "friends", "UUID", uuid, "FRIENDS") as String
+    }
+
+     fun exists(uuid: String) : Boolean {
 
         val rs: ResultSet = databaseManager.getResult("SELECT * FROM friends WHERE UUID='${uuid}'")
 
-        try{
-            if (rs.next()) {
-                return rs.getString("FRIENDS")
-            }
-        }catch (e: SQLException) {
-            e.printStackTrace()
-        }
-
-        return ""
-    }
-
-    private fun exists(player: Player) : Boolean {
-
-        val rs: ResultSet = databaseManager.getResult("SELECT * FROM friends WHERE UUID='${player.uniqueId}'")
-
         try {
-            return !rs.next()
+            return rs.next()
         }catch (e: SQLException) {
             e.printStackTrace()
         }
 
         return false
+    }
+
+    private fun get(select: String, database: String, where: String, result: String, type: String): Any? {
+        val rs: ResultSet =
+            databaseManager.getResult("SELECT $select FROM $database WHERE $where='$result'")
+        try {
+            if (rs.next()) {
+                return rs.getObject(type)
+            }
+        } catch (ex: SQLException) {
+            ex.printStackTrace()
+        }
+        return ""
+    }
+
+    private fun update(database: String, set: String, setTo: String, where: String, result: String) {
+        databaseManager.update("UPDATE $database SET $set='$setTo' WHERE $where='$result'")
     }
 
 }

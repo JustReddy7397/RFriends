@@ -5,6 +5,7 @@ import com.google.common.io.ByteStreams
 import com.mongodb.client.model.Filters
 import com.mongodb.client.model.Updates
 import ga.justreddy.wiki.rfriendsspigot.configManager
+import ga.justreddy.wiki.rfriendsspigot.databaseManager
 import ga.justreddy.wiki.rfriendsspigot.enums.Messages
 import ga.justreddy.wiki.rfriendsspigot.events.custom.FriendAddEvent
 import ga.justreddy.wiki.rfriendsspigot.mongoHelper
@@ -21,6 +22,8 @@ import org.bukkit.entity.Player
 import wiki.justreddy.ga.reddyutils.uitl.ChatUtil
 import java.io.ByteArrayInputStream
 import java.io.DataInputStream
+import java.sql.ResultSet
+import java.sql.SQLException
 import java.util.*
 
 
@@ -97,56 +100,31 @@ class FriendHelper : ChatUtil {
                 )
             }
 
-            if (plugin.isBungecoordEnabled) {
-                val out: ByteArrayDataOutput = ByteStreams.newDataOutput()
-                out.writeUTF("PlayerList")
-                out.writeUTF("ALL")
-                val `in` = DataInputStream(ByteArrayInputStream(out.toByteArray()))
-                val players: List<String> = `in`.readUTF().split(",")
-                if (players.contains(friend.name)) {
-                    val f = TextComponent(c("&eFriend request from ${friend.name}\n"))
-                    val accept = TextComponent(c("&a[ACCEPT]"))
-                    accept.hoverEvent = HoverEvent(
-                        HoverEvent.Action.SHOW_TEXT,
-                        ComponentBuilder(c("&aClick to accept the friend request")).create()
-                    )
-                    accept.clickEvent = ClickEvent(ClickEvent.Action.RUN_COMMAND, "/friends accept " + player.name)
-                    val line = TextComponent(c(" &9- "))
-                    val deny = TextComponent(c("&c[DENY]"))
-                    deny.hoverEvent = HoverEvent(
-                        HoverEvent.Action.SHOW_TEXT,
-                        ComponentBuilder(c("&cClick to deny the friend request")).create()
-                    )
-                    deny.clickEvent = ClickEvent(ClickEvent.Action.RUN_COMMAND, "/friends accept " + player.name)
-                    try {
-                        bungeeHelper.sendMessage(friend.name!!, f, accept, line, deny)
-                    } catch (ignored: NullPointerException) {
-                    }
-                }
 
-            } else {
-                if (friend.isOnline) {
-                    val f = TextComponent(c("&eFriend request from ${friend.name}\n"))
-                    val accept = TextComponent(c("&a[ACCEPT]"))
-                    accept.hoverEvent = HoverEvent(
-                        HoverEvent.Action.SHOW_TEXT,
-                        ComponentBuilder(c("&aClick to accept the friend request")).create()
-                    )
-                    accept.clickEvent = ClickEvent(ClickEvent.Action.RUN_COMMAND, "/friends accept " + player.name)
-                    val line = TextComponent(c(" &9- "))
-                    val deny = TextComponent(c("&c[DENY]"))
-                    deny.hoverEvent = HoverEvent(
-                        HoverEvent.Action.SHOW_TEXT,
-                        ComponentBuilder(c("&cClick to deny the friend request")).create()
-                    )
-                    deny.clickEvent = ClickEvent(ClickEvent.Action.RUN_COMMAND, "/friends accept " + player.name)
-                    friend.player!!.spigot().sendMessage(f, accept, line, deny)
-                }
+            if (friend.isOnline) {
+                val f = TextComponent(c("&eFriend request from ${friend.name}\n"))
+                val accept = TextComponent(c("&a[ACCEPT]"))
+                accept.hoverEvent = HoverEvent(
+                    HoverEvent.Action.SHOW_TEXT,
+                    ComponentBuilder(c("&aClick to accept the friend request")).create()
+                )
+                accept.clickEvent = ClickEvent(ClickEvent.Action.RUN_COMMAND, "/friends accept " + player.name)
+                val line = TextComponent(c(" &9- "))
+                val deny = TextComponent(c("&c[DENY]"))
+                deny.hoverEvent = HoverEvent(
+                    HoverEvent.Action.SHOW_TEXT,
+                    ComponentBuilder(c("&cClick to deny the friend request")).create()
+                )
+                deny.clickEvent = ClickEvent(ClickEvent.Action.RUN_COMMAND, "/friends accept " + player.name)
+                friend.player!!.spigot().sendMessage(f, accept, line, deny)
             }
 
 
         } else {
-            TODO("SQL")
+            if(!dataHelper.exists(friend.uniqueId.toString())){
+                player.sendMessage(Messages.GENERAL_PLAYER_NOT_FOUND.toString(friend))
+                return
+            }
         }
 
     }
@@ -157,7 +135,29 @@ class FriendHelper : ChatUtil {
      */
 
     fun denyFriendRequest(friend: Player, player: OfflinePlayer) {
-        TODO("Make method")
+        if (friend.uniqueId == player.uniqueId) {
+            friend.sendMessage(Messages.GENERAL_NOT_YOURSELF.toString())
+            return
+        }
+
+        if (plugin.isMongoConnected) {
+            val requestDocument: Document? = mongoHelper.getDatabase("requests")
+                .find(Document("Player", player.uniqueId.toString()).append("Friend", friend.uniqueId.toString()))
+                .first()
+            if (requestDocument == null) {
+                friend.sendMessage(Messages.GENERAL_FRIEND_NO_REQUEST.toString(player));
+                return
+            }
+
+            mongoHelper.getDatabase("requests").deleteOne(
+                Document("Player", player.uniqueId.toString())
+                    .append("Friend", friend.uniqueId.toString())
+            )
+
+        } else {
+            TODO("SQL")
+        }
+
     }
 
     /**
@@ -221,7 +221,7 @@ class FriendHelper : ChatUtil {
                     Updates.set("count", (dataHelper.getFriendCount(player.uniqueId.toString()) + 1))
                 )
 
-        }else{
+        } else {
             TODO("SQL")
         }
 
@@ -241,8 +241,6 @@ class FriendHelper : ChatUtil {
                 return;
             }
 
-
-
             val document: Document =
                 mongoHelper.getDatabase("friends").find(Document("uuid", player.uniqueId.toString())).first()!!
 
@@ -256,13 +254,13 @@ class FriendHelper : ChatUtil {
                     Updates.pull("friends", player.uniqueId.toString())
                 )
                 mongoHelper.getDatabase("friends").updateOne(
-                        Filters.eq("uuid", friend.uniqueId.toString()),
-                        Updates.set("count", (dataHelper.getFriendCount(friend.uniqueId.toString()) - 1))
-                    )
+                    Filters.eq("uuid", friend.uniqueId.toString()),
+                    Updates.set("count", (dataHelper.getFriendCount(friend.uniqueId.toString()) - 1))
+                )
                 mongoHelper.getDatabase("friends").updateOne(
-                        Filters.eq("uuid", player.uniqueId.toString()),
-                        Updates.set("count", (dataHelper.getFriendCount(player.uniqueId.toString()) - 1))
-                    )
+                    Filters.eq("uuid", player.uniqueId.toString()),
+                    Updates.set("count", (dataHelper.getFriendCount(player.uniqueId.toString()) - 1))
+                )
 
                 if (plugin.isBungecoordEnabled) {
                     try {
@@ -280,10 +278,27 @@ class FriendHelper : ChatUtil {
                 player.sendMessage(Messages.GENERAL_NOT_FRIEND.toString(friend))
             }
 
-        }else {
+        } else {
             TODO("SQL")
         }
 
     }
 
+
+    private fun get(select: String, database: String, where: String, result: String, type: String): Any? {
+        val rs: ResultSet =
+            databaseManager.getResult("SELECT $select FROM $database WHERE $where='$result'")
+        try {
+            if (rs.next()) {
+                return rs.getObject(type)
+            }
+        } catch (ex: SQLException) {
+            ex.printStackTrace()
+        }
+        return ""
+    }
+
+    private fun update(database: String, set: String, setTo: String, where: String, result: String) {
+        databaseManager.update("UPDATE $database SET $set='$setTo' WHERE $where='$result'")
+    }
 }

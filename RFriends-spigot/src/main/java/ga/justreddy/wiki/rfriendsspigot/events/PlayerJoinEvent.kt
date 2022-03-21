@@ -14,15 +14,17 @@ class PlayerJoinEvent : Listener, ChatUtil {
     @EventHandler
     fun onJoin(e: PlayerJoinEvent) {
         dataHelper.loadPlayerData(e.player)
-/*        if (plugin.isMongoConnected) {
+        if(dataHelper.isOnline(e.player.uniqueId.toString())) return
+        dataHelper.toggleStatus(e.player.uniqueId.toString())
+        if (plugin.isMongoConnected) {
             for (uuid in dataHelper.getFriends(e.player.uniqueId.toString())) {
                 if (!dataHelper.isOnline(uuid)) continue
-               // if(event.isCancelled) return
+                val event = FriendJoinEvent(e.player, e.player)
+                if(event.isCancelled) return
+                Bukkit.getPluginManager().callEvent(event)
             }
-        }*/
-        val event = FriendJoinEvent(e.player, e.player)
+        }
 
-        Bukkit.getPluginManager().callEvent(event)
 
     }
 

@@ -1,9 +1,6 @@
 package ga.justreddy.wiki.rfriendsspigot.helpers.command
 
-import ga.justreddy.wiki.rfriendsspigot.commands.AcceptCommand
-import ga.justreddy.wiki.rfriendsspigot.commands.AddCommand
-import ga.justreddy.wiki.rfriendsspigot.commands.GuiCommand
-import ga.justreddy.wiki.rfriendsspigot.commands.RemoveCommand
+import ga.justreddy.wiki.rfriendsspigot.commands.*
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
@@ -22,6 +19,7 @@ class CommandHelper : CommandExecutor, ChatUtil {
         commands.add(AddCommand())
         commands.add(GuiCommand())
         commands.add(RemoveCommand())
+        commands.add(DenyCommand())
         noPermissionMessage = c("&cYou need the %permission% permission to run this command");
     }
 
