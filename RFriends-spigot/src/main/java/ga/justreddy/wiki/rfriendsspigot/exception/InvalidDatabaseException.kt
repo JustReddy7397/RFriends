@@ -1,4 +1,4 @@
-package ga.justreddy.wiki.rfriendsbungee.exception
+package ga.justreddy.wiki.rfriendsspigot.exception
 
 import ga.justreddy.wiki.rfriendsspigot.plugin
 import org.bukkit.Bukkit

@@ -1,8 +1,8 @@
-package ga.justreddy.wiki.rfriendsbungee.helpers.command
+package ga.justreddy.wiki.rfriendsspigot.helpers.command
 
-import ga.justreddy.wiki.rfriendsbungee.commands.AcceptCommand
-import ga.justreddy.wiki.rfriendsbungee.commands.AddCommand
-import ga.justreddy.wiki.rfriendsbungee.commands.GuiCommand
+import ga.justreddy.wiki.rfriendsspigot.commands.AcceptCommand
+import ga.justreddy.wiki.rfriendsspigot.commands.AddCommand
+import ga.justreddy.wiki.rfriendsspigot.commands.GuiCommand
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender

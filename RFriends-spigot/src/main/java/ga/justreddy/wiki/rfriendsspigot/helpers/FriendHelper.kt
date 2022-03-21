@@ -1,12 +1,12 @@
-package ga.justreddy.wiki.rfriendsbungee.helpers
+package ga.justreddy.wiki.rfriendsspigot.helpers
 
 import com.google.common.io.ByteArrayDataOutput
 import com.google.common.io.ByteStreams
 import com.mongodb.client.model.Filters
 import com.mongodb.client.model.Updates
 import ga.justreddy.wiki.rfriendsspigot.configManager
-import ga.justreddy.wiki.rfriendsbungee.enums.Messages
-import ga.justreddy.wiki.rfriendsbungee.events.custom.FriendAddEvent
+import ga.justreddy.wiki.rfriendsspigot.enums.Messages
+import ga.justreddy.wiki.rfriendsspigot.events.custom.FriendAddEvent
 import ga.justreddy.wiki.rfriendsspigot.mongoHelper
 import ga.justreddy.wiki.rfriendsspigot.plugin
 import net.md_5.bungee.api.chat.ClickEvent

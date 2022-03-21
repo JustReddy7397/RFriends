@@ -1,7 +1,7 @@
-package ga.justreddy.wiki.rfriendsbungee.commands
+package ga.justreddy.wiki.rfriendsspigot.commands
 
-import ga.justreddy.wiki.rfriendsbungee.helpers.command.BaseCommand
-import ga.justreddy.wiki.rfriendsbungee.helpers.friendHelper
+import ga.justreddy.wiki.rfriendsspigot.helpers.command.BaseCommand
+import ga.justreddy.wiki.rfriendsspigot.helpers.friendHelper
 import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
 import org.bukkit.command.CommandSender

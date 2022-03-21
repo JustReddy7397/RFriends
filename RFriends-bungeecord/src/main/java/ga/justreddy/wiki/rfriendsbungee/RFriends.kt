@@ -8,12 +8,14 @@ lateinit var configHelper: ConfigHelper
 
 class RFriends : Plugin() {
 
+
     override fun onEnable() {
-        plugin = this
+        TODO("BungeeCord Implementation")
+    /*        plugin = this
         configHelper = ConfigHelper()
         configHelper.getConfig("database.yml")
         configHelper.getConfig("messages.yml")
-        configHelper.getConfig("settings.yml")
+        configHelper.getConfig("settings.yml")*/
     }
 
     override fun onDisable() {

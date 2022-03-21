@@ -1,7 +1,7 @@
 package ga.justreddy.wiki.rfriendsspigot.tasks
 
-import ga.justreddy.wiki.rfriendsbungee.enums.Messages
-import ga.justreddy.wiki.rfriendsbungee.helpers.bungeeHelper
+import ga.justreddy.wiki.rfriendsspigot.enums.Messages
+import ga.justreddy.wiki.rfriendsspigot.helpers.bungeeHelper
 import ga.justreddy.wiki.rfriendsspigot.mongoHelper
 import ga.justreddy.wiki.rfriendsspigot.plugin
 import org.bson.Document

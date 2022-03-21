@@ -1,7 +1,7 @@
-package ga.justreddy.wiki.rfriendsbungee.events
-import ga.justreddy.wiki.rfriendsbungee.events.custom.FriendJoinEvent
-import ga.justreddy.wiki.rfriendsbungee.helpers.bungeeHelper
-import ga.justreddy.wiki.rfriendsbungee.helpers.dataHelper
+package ga.justreddy.wiki.rfriendsspigot.events
+import ga.justreddy.wiki.rfriendsspigot.events.custom.FriendJoinEvent
+import ga.justreddy.wiki.rfriendsspigot.helpers.bungeeHelper
+import ga.justreddy.wiki.rfriendsspigot.helpers.dataHelper
 import ga.justreddy.wiki.rfriendsspigot.plugin
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler

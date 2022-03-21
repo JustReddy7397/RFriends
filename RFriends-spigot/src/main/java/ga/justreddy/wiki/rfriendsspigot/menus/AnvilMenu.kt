@@ -1,7 +1,7 @@
-package ga.justreddy.wiki.rfriendsbungee.menus
+package ga.justreddy.wiki.rfriendsspigot.menus
 
 import com.cryptomorin.xseries.XMaterial
-import ga.justreddy.wiki.rfriendsbungee.helpers.friendHelper
+import ga.justreddy.wiki.rfriendsspigot.helpers.friendHelper
 import ga.justreddy.wiki.rfriendsspigot.plugin
 import net.wesjd.anvilgui.AnvilGUI
 import org.bukkit.Bukkit

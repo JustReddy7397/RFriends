@@ -1,4 +1,4 @@
-package ga.justreddy.wiki.rfriendsbungee.enums
+package ga.justreddy.wiki.rfriendsspigot.enums
 
 import ga.justreddy.wiki.rfriendsspigot.configManager
 import org.bukkit.OfflinePlayer

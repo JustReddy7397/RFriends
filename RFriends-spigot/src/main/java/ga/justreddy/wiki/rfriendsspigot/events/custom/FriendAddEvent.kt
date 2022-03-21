@@ -1,4 +1,4 @@
-package ga.justreddy.wiki.rfriendsbungee.events.custom
+package ga.justreddy.wiki.rfriendsspigot.events.custom
 
 import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
