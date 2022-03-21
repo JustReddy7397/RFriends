@@ -1,0 +1,47 @@
+# Placeholders:
+# %prefix% - Shows the plugins prefix ( works in every message )
+# %player% - Shows the players actual name
+# %displayname% - Shows the players displayname ( will throw an error if the player is offline or null )
+
+
+prefix: "&7[&cFriends&7]"
+
+General:
+  friend-request:
+    - "&e--------------------"
+    - ""
+    - "&aSuccessfully sent a friend request to %player%"
+    - "&aThey have 5 minutes to accept"
+    - ""
+    - "&e--------------------"
+  friend-request-timeout: "%prefix% &cCancelled the friend request to %player% because the 5 minutes were over"
+  friend-request-accept: "%prefix% &aYou're now friends with %player%"
+  already-friend: "%prefix% &cThat player is already your friend"
+  not-friend: "%prefix% &cThat player is not your friend"
+  friend-no-request: "%prefix% &cYou've not gotten a friend request from this person"
+  friend-already-requested: "%prefix% &cYou've already send a friend request to this person!"
+  friend-request-disabled: "%prefix% &cThis player has friend requests disabled"
+  removed:
+    # Player
+    player1: "%prefix% &aSuccessfully removed %player% from your friend list"
+    # Removed Friend
+    player2: "%prefix% &c%player% has removed you from their friend list"
+  friend-join: "%prefix% &e%player% joined"
+  friend-leave: "%prefix% &e%player% left"
+  max-friends: "%prefix% &cYou can't have more than 100 friends"
+  friend-offline: "%prefix% &c%player% is offline"
+  friend-request-on: "%prefix% &aSuccessfully enabled friend requests"
+  friend-request-off: "%prefix% &aSuccessfully disabled friend requests"
+  player-not-found: "%prefix% &cCan't find the player %player%"
+  friend-request-yourself: "%prefix &cYou can't do that to yourself"
+
+Messages:
+  to: "&dTo &a%player% &7: &r%message%"
+  from: "&dFrom &a%player% &7: &r%message%"
+
+friend_list:
+  online: "&a%friend% is currently online"
+  offline: "&c%friend% is currently offline"
+
+Database:
+  not-in-database: "%prefix% &cThat user is not in the database"
