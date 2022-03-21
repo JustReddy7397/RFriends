@@ -1,6 +1,6 @@
 name: RFriends
 version: '${project.version}'
-main: ga.justreddy.wiki.rfriends.RFriends
+main: ga.justreddy.wiki.rfriendsspigot.RFriends
 api-version: 1.13
 softdepend: [ PlaceholderAPI ]
 commands:
@@ -10,7 +10,7 @@ commands:
       - friend
 
 runtime-libraries:
-  relocation-prefix: 'ga.justreddy.wiki.libs'
+  relocation-prefix: 'ga.justreddy.wiki.rfriends.libs'
   libraries-folder: 'libs'
   libraries:
     kotlin_common:

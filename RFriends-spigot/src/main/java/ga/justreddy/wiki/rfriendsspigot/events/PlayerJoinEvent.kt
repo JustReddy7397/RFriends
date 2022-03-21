@@ -6,6 +6,7 @@ import ga.justreddy.wiki.rfriendsspigot.plugin
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import org.bukkit.event.player.PlayerJoinEvent
 import wiki.justreddy.ga.reddyutils.uitl.ChatUtil
 
 class PlayerJoinEvent : Listener, ChatUtil {

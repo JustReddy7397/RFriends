@@ -82,6 +82,10 @@
 
     <repositories>
         <repository>
+            <id>de.exlll</id>
+            <url>https://maven.pkg.github.com/Exlll/ConfigLib</url>
+        </repository>
+        <repository>
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>
         </repository>
@@ -114,5 +118,7 @@
             <artifactId>mongodb-driver</artifactId>
             <version>3.12.10</version>
         </dependency>
+
+
     </dependencies>
 </project>

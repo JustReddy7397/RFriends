@@ -1,3 +1,4 @@
 name: RFriends
 version: '${project.version}'
 main: ga.justreddy.wiki.rfriendsbungee.RFriends
+author: JustReddy

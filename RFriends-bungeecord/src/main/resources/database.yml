@@ -1,0 +1,12 @@
+# Storage types: mongodb | sql | mysql
+storage: "sql"
+
+mongodb:
+  uri: ""
+
+mysql:
+  database: "database"
+  username: "username"
+  password: "password"
+  host: "localhost"
+  port: 3306
