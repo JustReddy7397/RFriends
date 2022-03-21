@@ -51,4 +51,12 @@
         <module>rfriends-spigot</module>
         <module>rfriends-bungeecord</module>
     </modules>
+    <dependencies>
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>0.10.2</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
 </project>

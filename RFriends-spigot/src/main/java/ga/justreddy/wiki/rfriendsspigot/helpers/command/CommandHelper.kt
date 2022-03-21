@@ -3,12 +3,13 @@ package ga.justreddy.wiki.rfriendsspigot.helpers.command
 import ga.justreddy.wiki.rfriendsspigot.commands.AcceptCommand
 import ga.justreddy.wiki.rfriendsspigot.commands.AddCommand
 import ga.justreddy.wiki.rfriendsspigot.commands.GuiCommand
+import ga.justreddy.wiki.rfriendsspigot.commands.RemoveCommand
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
+import org.reflections.Reflections
 import wiki.justreddy.ga.reddyutils.uitl.ChatUtil
-
 
 class CommandHelper : CommandExecutor, ChatUtil {
 
@@ -20,6 +21,7 @@ class CommandHelper : CommandExecutor, ChatUtil {
         commands.add(AcceptCommand())
         commands.add(AddCommand())
         commands.add(GuiCommand())
+        commands.add(RemoveCommand())
         noPermissionMessage = c("&cYou need the %permission% permission to run this command");
     }
 
@@ -29,7 +31,11 @@ class CommandHelper : CommandExecutor, ChatUtil {
             for (i in 0 until getCommands().size) {
                 if (getCommands()[i].isPlayersOnly()) {
                     if (sender is Player) {
-                        if ((args[0].equals(getCommands()[i].getName(), ignoreCase = true))|| (getCommands()[i].getAliases().contains(args[0]))) {
+                        if ((args[0].equals(
+                                getCommands()[i].getName(),
+                                ignoreCase = true
+                            )) || (getCommands()[i].getAliases().contains(args[0]))
+                        ) {
                             if (!getCommands()[i].isPermissionEmpty()) {
                                 if (!sender.hasPermission(getCommands()[i].getPermission())) {
                                     sender.sendMessage(

@@ -152,6 +152,15 @@ class FriendHelper : ChatUtil {
     }
 
     /**
+     * @param friend The player the request has been sent to
+     * @param player The player who has sent the request
+     */
+
+    fun denyFriendRequest(friend: Player, player: OfflinePlayer) {
+        TODO("Make method")
+    }
+
+    /**
      * @param friend The player the requests has been sent to
      * @param player The player who has sent the request
      */

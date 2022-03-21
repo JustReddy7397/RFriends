@@ -154,5 +154,11 @@
             <artifactId>anvilgui</artifactId>
             <version>1.5.3-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>0.10.2</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 </project>

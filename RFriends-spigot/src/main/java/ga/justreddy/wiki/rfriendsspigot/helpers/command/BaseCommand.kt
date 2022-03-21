@@ -1,4 +1,4 @@
-package ga.justreddy.wiki.rfriendsbungee.helpers.command
+package ga.justreddy.wiki.rfriendsspigot.helpers.command
 
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player

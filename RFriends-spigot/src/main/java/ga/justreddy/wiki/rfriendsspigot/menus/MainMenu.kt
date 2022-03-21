@@ -1,4 +1,4 @@
-package ga.justreddy.wiki.rfriendsbungee.menus
+package ga.justreddy.wiki.rfriendsspigot.menus
 
 import com.cryptomorin.xseries.XMaterial
 import org.bukkit.ChatColor

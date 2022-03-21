@@ -1,4 +1,4 @@
-package ga.justreddy.wiki.rfriendsbungee.helpers
+package ga.justreddy.wiki.rfriendsspigot.helpers
 
 import com.mongodb.MongoClient
 import com.mongodb.MongoClientURI

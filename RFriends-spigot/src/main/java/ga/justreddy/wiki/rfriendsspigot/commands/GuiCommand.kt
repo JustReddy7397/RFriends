@@ -1,7 +1,7 @@
-package ga.justreddy.wiki.rfriendsbungee.commands
+package ga.justreddy.wiki.rfriendsspigot.commands
 
-import ga.justreddy.wiki.rfriendsbungee.helpers.command.BaseCommand
-import ga.justreddy.wiki.rfriendsbungee.menus.MainMenu
+import ga.justreddy.wiki.rfriendsspigot.helpers.command.BaseCommand
+import ga.justreddy.wiki.rfriendsspigot.menus.MainMenu
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import wiki.justreddy.ga.reddyutils.uitl.ChatUtil

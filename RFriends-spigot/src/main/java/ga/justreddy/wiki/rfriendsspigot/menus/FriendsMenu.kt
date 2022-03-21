@@ -1,7 +1,7 @@
-package ga.justreddy.wiki.rfriendsbungee.menus
+package ga.justreddy.wiki.rfriendsspigot.menus
 
 import com.cryptomorin.xseries.XMaterial
-import ga.justreddy.wiki.rfriendsbungee.helpers.dataHelper
+import ga.justreddy.wiki.rfriendsspigot.helpers.dataHelper
 import org.bukkit.ChatColor
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.InventoryClickEvent

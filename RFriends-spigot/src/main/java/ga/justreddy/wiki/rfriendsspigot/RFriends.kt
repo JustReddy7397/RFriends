@@ -1,12 +1,12 @@
 package ga.justreddy.wiki.rfriendsspigot
 
-import ga.justreddy.wiki.rfriendsbungee.events.PlayerJoinEvent
-import ga.justreddy.wiki.rfriendsbungee.helpers.MongoHelper
-import ga.justreddy.wiki.rfriendsbungee.exception.InvalidDatabaseException
-import ga.justreddy.wiki.rfriendsbungee.helpers.BungeeHelper
-import ga.justreddy.wiki.rfriendsbungee.helpers.DataHelper
-import ga.justreddy.wiki.rfriendsbungee.helpers.FriendHelper
-import ga.justreddy.wiki.rfriendsbungee.helpers.command.CommandHelper
+import ga.justreddy.wiki.rfriendsspigot.events.PlayerJoinEvent
+import ga.justreddy.wiki.rfriendsspigot.helpers.MongoHelper
+import ga.justreddy.wiki.rfriendsspigot.exception.InvalidDatabaseException
+import ga.justreddy.wiki.rfriendsspigot.helpers.BungeeHelper
+import ga.justreddy.wiki.rfriendsspigot.helpers.DataHelper
+import ga.justreddy.wiki.rfriendsspigot.helpers.FriendHelper
+import ga.justreddy.wiki.rfriendsspigot.helpers.command.CommandHelper
 import ga.justreddy.wiki.rfriendsspigot.tasks.RequestTask
 import org.bukkit.scheduler.BukkitTask
 import pluginlib.DependentJavaPlugin
