@@ -41,6 +41,14 @@ runtime-libraries:
       groupId: "com.h2database"
       artifactId: "h2"
       version: 1.4.200
+    reddyutils:
+      groupId: "com.github.JustReddy7397"
+      artifactId: "ReddyUtils"
+      version: 2.6.5
+    xseries:
+      groupId: "com.github.cryptomorin"
+      artifactId: "XSeries"
+      version: 8.6.1
 
 
 permissions:
