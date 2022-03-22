@@ -14,8 +14,8 @@ class FriendsMenu : PaginatedChestMenu(
     ChatColor.translateAlternateColorCodes('&', "Your friends"), 54
 ), ChatUtil {
 
-    override fun handleMenu(e: InventoryClickEvent?) {
-        TODO("Not yet implemented")
+    override fun handleMenu(e: InventoryClickEvent) {
+        e.whoClicked.sendMessage(c("&cComing Soon!"))
     }
 
     override fun setMenuItems(p: Player?) {

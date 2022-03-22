@@ -3,9 +3,11 @@ package ga.justreddy.wiki.rfriendsspigot.helpers
 import com.mongodb.client.model.Filters
 import com.mongodb.client.model.Updates
 import ga.justreddy.wiki.rfriendsspigot.databaseManager
+import ga.justreddy.wiki.rfriendsspigot.enums.Messages
 import ga.justreddy.wiki.rfriendsspigot.mongoHelper
 import ga.justreddy.wiki.rfriendsspigot.plugin
 import org.bson.Document
+import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import java.sql.ResultSet
 import java.sql.SQLException
@@ -25,16 +27,16 @@ class DataHelper {
      * @param uuid The UUID of the friend
      */
 
-    fun getFriends(uuid: String) : List<String> {
+    fun getFriends(uuid: String): List<String> {
         val friends = mutableListOf<String>()
-        if(plugin.isMongoConnected){
+        if (plugin.isMongoConnected) {
             val document: Document? = mongoHelper.getDatabase("friends").find(Document("uuid", uuid)).first()
             if (document != null) {
                 friends.addAll(document.getList("friends", String::class.java))
             }
-        }else{
+        } else {
             val friendsRaw: String = getFriendListRaw(uuid)
-            if(friendsRaw.isNotEmpty()) {
+            if (friendsRaw.isNotEmpty()) {
                 val friendies: List<String> = friendsRaw.split(";")
                 friends.addAll(friendies)
             }
@@ -49,13 +51,13 @@ class DataHelper {
      * Gets the name of the friend
      * @param uuid The UUID of the friend
      */
-    fun getName(uuid: String) : String {
-        if(plugin.isMongoConnected) {
+    fun getName(uuid: String): String {
+        if (plugin.isMongoConnected) {
             val document: Document? = mongoHelper.getDatabase("friends").find(Document("uuid", uuid)).first()
-            if(document != null){
+            if (document != null) {
                 return document.getString("name")
             }
-        }else{
+        } else {
             return get("*", "friends", "UUID", uuid, "NAME") as String
         }
         return ""
@@ -66,13 +68,13 @@ class DataHelper {
      * @param uuid The UUID of the friend
      */
 
-    fun isOnline(uuid: String) : Boolean {
+    fun isOnline(uuid: String): Boolean {
 
         if (plugin.isMongoConnected) {
             val document: Document = mongoHelper.getDatabase("friends").find(Document("uuid", uuid)).first()
                 ?: return false
             return document.getBoolean("online")
-        }else{
+        } else {
             return get("*", "friends", "UUID", uuid, "ONLINE")?.equals("true") ?: false
         }
     }
@@ -82,13 +84,13 @@ class DataHelper {
      * @param uuid The UUID of the friend
      */
 
-    fun getFriendCount(uuid: String) : Int {
+    fun getFriendCount(uuid: String): Int {
 
-        if(plugin.isMongoConnected) {
+        if (plugin.isMongoConnected) {
             val document: Document = mongoHelper.getDatabase("friends").find(Document("uuid", uuid)).first()
                 ?: return 0
             return document.getInteger("count")
-        }else{
+        } else {
             return get("*", "friends", "UUID", uuid, "COUNT") as Int
         }
 
@@ -101,33 +103,63 @@ class DataHelper {
 
     fun toggleStatus(uuid: String) {
 
-        if(plugin.isMongoConnected) {
-            if(isOnline(uuid)){
+        if (plugin.isMongoConnected) {
+            if (isOnline(uuid)) {
                 mongoHelper.getDatabase("friends").updateOne(Filters.eq("uuid", uuid), Updates.set("online", false));
-            }else{
+            } else {
                 mongoHelper.getDatabase("friends").updateOne(Filters.eq("uuid", uuid), Updates.set("online", true));
             }
-        }else{
-            if(isOnline(uuid)){
+        } else {
+            if (isOnline(uuid)) {
                 update("friends", "ONLINE", "false", "UUID", uuid)
-            }else{
+            } else {
                 update("friends", "ONLINE", "true", "UUID", uuid)
             }
         }
-
     }
 
+    fun toggleFriendRequests(uuid: String) {
+        if (plugin.isMongoConnected) {
+            val document: Document = mongoHelper.getDatabase("friends").find(Document("uuid", uuid)).first() ?: return
+            if (document.getBoolean("allowfriendrequests")) {
+                mongoHelper.getDatabase("friends")
+                    .updateOne(Filters.eq("uuid", uuid), Updates.set("allowfriendrequests", false))
+                Bukkit.getPlayer(uuid)!!.sendMessage(Messages.GENERAL_FRIEND_REQUEST_OFF.toString())
+            } else {
+                mongoHelper.getDatabase("friends")
+                    .updateOne(Filters.eq("uuid", uuid), Updates.set("allowfriendrequests", true))
+                Bukkit.getPlayer(uuid)!!.sendMessage(Messages.GENERAL_FRIEND_REQUEST_ON.toString())
+            }
+        } else {
+            val rs: ResultSet = databaseManager
+                .getResult("SELECT * FROM friends WHERE UUID='$uuid'")
+            var allowFriendRequests = false
+            try {
+                allowFriendRequests = rs.getString("ALLOWFRIENDREQUESTS").equals("true", ignoreCase = true)
+            } catch (ex: SQLException) {
+                ex.printStackTrace()
+            }
 
+            if (allowFriendRequests) {
+                update("friends", "ALLOWFRIENDREQUESTS", "false", "UUID", uuid)
+                Bukkit.getPlayer(uuid)!!.sendMessage(Messages.GENERAL_FRIEND_REQUEST_OFF.toString())
+            } else {
+                update("friends", "ALLOWFRIENDREQUESTS", "true", "UUID", uuid)
+                Bukkit.getPlayer(uuid)!!.sendMessage(Messages.GENERAL_FRIEND_REQUEST_ON.toString())
+            }
+        }
+    }
 
 
     // For loading stuff
 
     fun loadPlayerData(player: Player) {
 
-        if(plugin.isMongoConnected) {
-            val document: Document? = mongoHelper.getDatabase("friends").find(Document("uuid", player.uniqueId.toString())).first()
-            if(document != null) mongoHelper.getDatabase("friends").updateOne(Filters.eq("uuid", player.uniqueId.toString()), Updates.set("name", player.name))
-
+        if (plugin.isMongoConnected) {
+            val document: Document? =
+                mongoHelper.getDatabase("friends").find(Document("uuid", player.uniqueId.toString())).first()
+            if (document != null) mongoHelper.getDatabase("friends")
+                .updateOne(Filters.eq("uuid", player.uniqueId.toString()), Updates.set("name", player.name))
             else mongoHelper.getDatabase("friends").insertOne(
                 Document("uuid", player.uniqueId.toString())
                     .append("name", player.name)
@@ -136,28 +168,30 @@ class DataHelper {
                     .append("online", true)
                     .append("allowfriendrequests", true)
             )
-        }else{
-            if(!exists(player.uniqueId.toString())) databaseManager.update("UPDATE friends SET NAME='${player.name}' WHERE UUID='${player.uniqueId}'")
-            else databaseManager.update("INSERT INTO friends (UUID, NAME, FRIENDS, COUNT, ONLINE, ALLOWFRIENDREQUESTS)" +
-                    " VALUES " +
-                    "('${player.uniqueId}', '${player.name}', '"+""+"', '${0}', '${true}', '${true}')")
+        } else {
+            if (!exists(player.uniqueId.toString())) databaseManager.update("UPDATE friends SET NAME='${player.name}' WHERE UUID='${player.uniqueId}'")
+            else databaseManager.update(
+                "INSERT INTO friends (UUID, NAME, FRIENDS, COUNT, ONLINE, ALLOWFRIENDREQUESTS)" +
+                        " VALUES " +
+                        "('${player.uniqueId}', '${player.name}', '" + "" + "', '${0}', '${true}', '${true}')"
+            )
         }
 
     }
 
     // Sql Stuff
 
-    private fun getFriendListRaw(uuid: String) : String {
+    fun getFriendListRaw(uuid: String): String {
         return get("*", "friends", "UUID", uuid, "FRIENDS") as String
     }
 
-     fun exists(uuid: String) : Boolean {
+    fun exists(uuid: String): Boolean {
 
         val rs: ResultSet = databaseManager.getResult("SELECT * FROM friends WHERE UUID='${uuid}'")
 
         try {
             return rs.next()
-        }catch (e: SQLException) {
+        } catch (e: SQLException) {
             e.printStackTrace()
         }
 

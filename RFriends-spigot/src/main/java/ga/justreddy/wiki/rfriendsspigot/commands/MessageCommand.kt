@@ -4,26 +4,30 @@ import ga.justreddy.wiki.rfriendsspigot.enums.Messages
 import ga.justreddy.wiki.rfriendsspigot.helpers.command.BaseCommand
 import ga.justreddy.wiki.rfriendsspigot.helpers.friendHelper
 import org.bukkit.Bukkit
-import org.bukkit.OfflinePlayer
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import wiki.justreddy.ga.reddyutils.uitl.ChatUtil
-import java.lang.IndexOutOfBoundsException
 
-class DenyCommand : ChatUtil, BaseCommand(
-"deny",
-"Deny a friend request",
-"/f deny <name>",
-"rfriends.command.deny",
-true
+class MessageCommand : ChatUtil, BaseCommand(
+    "message",
+    "Message a friend",
+    "/f message <player> <message>",
+    "rfriends.command.message",
+    true,
+    "msg"
 ) {
 
     override fun onCommand(player: Player, args: Array<String>) {
         try{
+            val friend = Bukkit.getPlayer(args[1])!!
+            val builder: StringBuilder = StringBuilder()
+            for (i in 2 until args.size) {
+                builder.append(args[i]).append(" ")
+            }
 
-            val p: OfflinePlayer = Bukkit.getOfflinePlayer(args[1])
+            val msg = builder.toString()
+            friendHelper.sendMessage(player, friend, msg)
 
-            friendHelper.denyFriendRequest(player, p)
 
         }catch (e: IndexOutOfBoundsException) {
             player.sendMessage(Messages.INVALID_ARGUMENTS.toString().replace("%syntax%", getSyntax()))
@@ -34,5 +38,4 @@ true
     override fun onCommand(sender: CommandSender, args: Array<String>) {
         // Player only cmd, no need for this function
     }
-
 }

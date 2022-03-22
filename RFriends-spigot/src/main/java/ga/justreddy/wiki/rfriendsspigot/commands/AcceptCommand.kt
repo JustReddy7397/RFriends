@@ -1,5 +1,6 @@
 package ga.justreddy.wiki.rfriendsspigot.commands
 
+import ga.justreddy.wiki.rfriendsspigot.enums.Messages
 import ga.justreddy.wiki.rfriendsspigot.helpers.command.BaseCommand
 import ga.justreddy.wiki.rfriendsspigot.helpers.friendHelper
 import org.bukkit.Bukkit
@@ -25,7 +26,7 @@ class AcceptCommand : ChatUtil, BaseCommand(
             friendHelper.addFriend(player, p)
 
         }catch (e: IndexOutOfBoundsException) {
-            player.sendMessage(c(getSyntax()))
+            player.sendMessage(Messages.INVALID_ARGUMENTS.toString().replace("%syntax%", getSyntax()))
         }
 
     }

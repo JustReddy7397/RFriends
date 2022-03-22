@@ -28,8 +28,10 @@ enum class Messages(private val path: String) : ChatUtil {
     GENERAL_NOT_YOURSELF("General.friend-request-yourself"),
     MESSAGES_TO("Messages.to"),
     MESSAGES_FROM("Messages.from"),
-    DATABASE_NOT_EXISTS("Database.not-in-database")
+    DATABASE_NOT_EXISTS("Database.not-in-database"),
+    INVALID_ARGUMENTS("General.invalid-arguments")
     ;
+
 
     init {
 
