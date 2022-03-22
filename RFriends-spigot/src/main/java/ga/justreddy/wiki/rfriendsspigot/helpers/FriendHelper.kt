@@ -483,6 +483,24 @@ class FriendHelper : ChatUtil {
                 player.sendMessage(Messages.GENERAL_NOT_FRIEND.toString(friend));
                 return;
             }
+        }else{
+            if(!dataHelper.getFriends(player.uniqueId.toString()).contains(friend.uniqueId.toString())) {
+                player.sendMessage(Messages.GENERAL_NOT_FRIEND.toString(friend));
+                return
+            }
+
+            if (!dataHelper.isOnline(friend.uniqueId.toString())) {
+                player.sendMessage(Messages.GENERAL_FRIEND_OFFLINE.toString(friend));
+                return;
+            }
+
+            val event = FriendMessageEvent(player, friend, message)
+            if(event.isCancelled) return
+
+            player.sendMessage(Messages.MESSAGES_TO.toString(friend)!!.replace("%message%", message));
+            friend.sendMessage(Messages.MESSAGES_FROM.toString(player)!!.replace("%message%", message));
+            plugin.server.pluginManager.callEvent(event)
+
         }
 
     }

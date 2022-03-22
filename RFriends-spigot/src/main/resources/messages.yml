@@ -33,7 +33,8 @@ General:
   friend-request-on: "%prefix% &aSuccessfully enabled friend requests"
   friend-request-off: "%prefix% &aSuccessfully disabled friend requests"
   player-not-found: "%prefix% &cCan't find the player %player%"
-  friend-request-yourself: "%prefix &cYou can't do that to yourself"
+  friend-request-yourself: "%prefix% &cYou can't do that to yourself"
+  invalid-arguments: "&cInvalid Arguments! %syntax%"
 
 Messages:
   to: "&dTo &a%player% &7: &r%message%"

@@ -20,6 +20,7 @@ class CommandHelper : CommandExecutor, ChatUtil {
         commands.add(GuiCommand())
         commands.add(RemoveCommand())
         commands.add(DenyCommand())
+        commands.add(MessageCommand())
         noPermissionMessage = c("&cYou need the %permission% permission to run this command");
     }
 

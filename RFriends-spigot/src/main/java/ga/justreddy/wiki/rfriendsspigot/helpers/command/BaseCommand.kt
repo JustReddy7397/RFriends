@@ -2,6 +2,7 @@ package ga.justreddy.wiki.rfriendsspigot.helpers.command
 
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
+import java.util.*
 import kotlin.collections.ArrayList
 
 abstract class BaseCommand(name: String, description: String, syntax: String, permission: String, playersOnly: Boolean, vararg aliases: String?) {
@@ -19,7 +20,7 @@ abstract class BaseCommand(name: String, description: String, syntax: String, pe
         this.syntax = syntax
         this.permission = permission
         this.playersOnly = playersOnly
-        if(aliases != null) this.aliases.add(listOf(aliases).toString())
+        if(aliases != null) this.aliases.addAll(listOf((aliases).toString()))
     }
 
     fun getName() : String {

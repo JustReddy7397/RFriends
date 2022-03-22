@@ -1,11 +1,8 @@
 package ga.justreddy.wiki.rfriendsspigot
 
 import ga.justreddy.wiki.rfriendsspigot.events.PlayerJoinEvent
-import ga.justreddy.wiki.rfriendsspigot.helpers.MongoHelper
 import ga.justreddy.wiki.rfriendsspigot.exception.InvalidDatabaseException
-import ga.justreddy.wiki.rfriendsspigot.helpers.BungeeHelper
-import ga.justreddy.wiki.rfriendsspigot.helpers.DataHelper
-import ga.justreddy.wiki.rfriendsspigot.helpers.FriendHelper
+import ga.justreddy.wiki.rfriendsspigot.helpers.*
 import ga.justreddy.wiki.rfriendsspigot.helpers.command.CommandHelper
 import ga.justreddy.wiki.rfriendsspigot.tasks.RequestTask
 import org.bukkit.scheduler.BukkitTask
@@ -90,6 +87,8 @@ class RFriends : DependentJavaPlugin() {
                         " TIME LONG(100))"
             )
         }
+
+        if(server.pluginManager.getPlugin("PlaceholderAPI") != null) PlaceholderHelper().register()
 
         commandHelper = CommandHelper()
         getCommand("friends")?.setExecutor(commandHelper)
