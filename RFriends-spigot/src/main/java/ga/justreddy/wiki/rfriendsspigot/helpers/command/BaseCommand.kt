@@ -20,7 +20,7 @@ abstract class BaseCommand(name: String, description: String, syntax: String, pe
         this.syntax = syntax
         this.permission = permission
         this.playersOnly = playersOnly
-        if(aliases != null) this.aliases.addAll(listOf((aliases).toString()))
+        this.aliases.addAll(listOf((aliases).toString()))
     }
 
     fun getName() : String {

@@ -32,7 +32,6 @@ class PlayerJoinEvent : Listener, ChatUtil {
     fun onFriendJoin(e: FriendJoinEvent) {
         if (plugin.isBungecoordEnabled) {
             val name: String = Bukkit.getOfflinePlayer(e.getFriend().uniqueId).name ?: return
-            bungeeHelper.sendMessage(e.getPlayer().name, "hi")
         } else {
             Bukkit.getPlayer(e.getFriend().uniqueId)?.sendMessage(c("hi"))
         }

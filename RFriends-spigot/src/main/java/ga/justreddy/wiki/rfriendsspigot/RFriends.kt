@@ -89,7 +89,7 @@ class RFriends : DependentJavaPlugin() {
         }
 
         if(server.pluginManager.getPlugin("PlaceholderAPI") != null) PlaceholderHelper().register()
-
+        isBungecoordEnabled = configManager.getFile("settings").config.getBoolean("bungeecord")
         commandHelper = CommandHelper()
         getCommand("friends")?.setExecutor(commandHelper)
         registerEvents()

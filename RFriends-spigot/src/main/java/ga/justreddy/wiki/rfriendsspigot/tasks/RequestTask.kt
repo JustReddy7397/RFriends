@@ -47,11 +47,11 @@ class RequestTask : BukkitRunnable() {
 
 
 
-    private fun sendMessage(player: Player?, friend: String?) {
+    private fun sendMessage(player: Player?, friend: String) {
         if(player == null) return
         if(plugin.isBungecoordEnabled) {
             Messages.GENERAL_FRIEND_REQUEST_TIMEOUT.toString(Bukkit.getOfflinePlayer(UUID.fromString(friend)))
-                ?.let { bungeeHelper.sendMessage(player.name, it) }
+                ?.let { bungeeHelper.sendMessage(player, friend, it) }
         }else{
             if(player.isOnline){
                 player.sendMessage(Messages.GENERAL_FRIEND_REQUEST_TIMEOUT.toString(Bukkit.getOfflinePlayer(UUID.fromString(friend))))

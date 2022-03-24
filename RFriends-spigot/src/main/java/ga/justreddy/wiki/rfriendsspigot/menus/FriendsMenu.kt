@@ -11,11 +11,14 @@ import wiki.justreddy.ga.reddyutils.uitl.ChatUtil
 
 
 class FriendsMenu : PaginatedChestMenu(
-    ChatColor.translateAlternateColorCodes('&', "Your friends"), 54
+    ChatColor.translateAlternateColorCodes('&', "&aYour friends"), 54
 ), ChatUtil {
 
     override fun handleMenu(e: InventoryClickEvent) {
-        e.whoClicked.sendMessage(c("&cComing Soon!"))
+        if(e.currentItem!!.type.equals(XMaterial.PLAYER_HEAD.parseItem())) {
+            ChatColor.stripColor(e.currentItem?.itemMeta?.displayName)
+                ?.let { PlayerMenu(it).open(e.whoClicked as Player) }
+        }
     }
 
     override fun setMenuItems(p: Player?) {

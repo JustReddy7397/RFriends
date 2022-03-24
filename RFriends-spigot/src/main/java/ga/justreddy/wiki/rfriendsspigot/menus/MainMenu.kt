@@ -31,7 +31,7 @@ class MainMenu : ChestMenu(
         val friends = XMaterial.PLAYER_HEAD.parseItem()
         val friend = friends!!.itemMeta as SkullMeta?
         friend!!.owner = p.name
-        friend!!.setDisplayName(c("&aView all your friends"))
+        friend.setDisplayName(c("&aView all your friends"))
         friends.itemMeta = friend
         val request = XMaterial.PAPER.parseItem()
         val requestMeta = request!!.itemMeta

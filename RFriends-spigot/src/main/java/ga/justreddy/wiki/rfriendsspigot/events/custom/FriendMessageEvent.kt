@@ -6,12 +6,12 @@ import org.bukkit.event.Cancellable
 import org.bukkit.event.Event
 import org.bukkit.event.HandlerList
 
-class FriendMessageEvent(friend: Player, player: Player, message: String) : Event(), Cancellable {
+class FriendMessageEvent(friend: Player, player: OfflinePlayer, message: String) : Event(), Cancellable {
 
     /**
      * @param player The player who has sent the message
      */
-    private var player: Player
+    private var player: OfflinePlayer
 
     /**
      * @param friend The friend the message has been sent to
@@ -33,7 +33,7 @@ class FriendMessageEvent(friend: Player, player: Player, message: String) : Even
         this.isCancelled = false
     }
 
-    fun getPlayer(): Player {
+    fun getPlayer(): OfflinePlayer {
         return player
     }
 

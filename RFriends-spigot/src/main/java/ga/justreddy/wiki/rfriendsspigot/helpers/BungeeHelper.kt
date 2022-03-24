@@ -5,6 +5,7 @@ import com.google.common.io.ByteStreams
 import ga.justreddy.wiki.rfriendsspigot.plugin
 import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.Bukkit
+import org.bukkit.entity.Player
 import wiki.justreddy.ga.reddyutils.uitl.ChatUtil
 
 
@@ -16,37 +17,33 @@ class BungeeHelper : ChatUtil {
         bungeeHelper = this
     }
 
-    fun sendMessage(name: String, message: String) {
+    fun sendMessage(player: Player, name: String, message: String) {
 
         if (name.isEmpty()) return
         if(message.isEmpty()) return
 
         val out: ByteArrayDataOutput = ByteStreams.newDataOutput()
         out.writeUTF("Message")
-        try{
-            out.writeUTF(name)
-        }catch (ignored: NullPointerException) {}
+        out.writeUTF(name)
         out.writeUTF(c(message))
 
         plugin.server.messenger.registerOutgoingPluginChannel(plugin, "BungeeCord")
-        Bukkit.getPlayer(name)?.sendPluginMessage(plugin, "BungeeCord", out.toByteArray())
+        player.sendPluginMessage(plugin, "BungeeCord", out.toByteArray())
 
     }
 
 
-    fun sendMessage(name: String, vararg textComponents: TextComponent) {
+    fun sendMessage(player: Player, name: String, vararg textComponents: TextComponent) {
         if (name.isEmpty()) return
         if(textComponents.isEmpty()) return
 
         val out: ByteArrayDataOutput = ByteStreams.newDataOutput()
         out.writeUTF("Message")
-        try{
-            out.writeUTF(name)
-        }catch (ignored: NullPointerException) {}
+        out.writeUTF(name)
         out.writeUTF(c(textComponents.contentToString()))
 
         plugin.server.messenger.registerOutgoingPluginChannel(plugin, "BungeeCord")
-        Bukkit.getPlayer(name)?.sendPluginMessage(plugin, "BungeeCord", out.toByteArray())
+        player.sendPluginMessage(plugin, "BungeeCord", out.toByteArray())
     }
 
 

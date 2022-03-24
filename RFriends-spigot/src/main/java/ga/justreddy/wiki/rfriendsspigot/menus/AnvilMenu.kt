@@ -14,6 +14,7 @@ class AnvilMenu {
 
     fun openRequestMenu(p: Player?) {
         AnvilGUI.Builder()
+            .title(ChatColor.translateAlternateColorCodes('&', "&aAdd a friend"))
             .onComplete { player, s ->
                 try {
                     friendHelper.sendFriendRequest(player, Bukkit.getOfflinePlayer(s))
@@ -31,6 +32,7 @@ class AnvilMenu {
 
     fun openRemoveMenu(p: Player?) {
         AnvilGUI.Builder()
+            .title(ChatColor.translateAlternateColorCodes('&', "&cRemove a friend"))
             .onComplete { player, s ->
                 try {
                     friendHelper.removeFriend(player, Bukkit.getOfflinePlayer(s))

@@ -99,7 +99,7 @@ class FriendHelper : ChatUtil {
             }
 
 
-            if (friend.isOnline) {
+            if (plugin.isBungecoordEnabled) {
                 val f = TextComponent(c("&eFriend request from ${friend.name}\n"))
                 val accept = TextComponent(c("&a[ACCEPT]"))
                 accept.hoverEvent = HoverEvent(
@@ -114,12 +114,30 @@ class FriendHelper : ChatUtil {
                     ComponentBuilder(c("&cClick to deny the friend request")).create()
                 )
                 deny.clickEvent = ClickEvent(ClickEvent.Action.RUN_COMMAND, "/friends accept " + player.name)
-                friend.player!!.spigot().sendMessage(f, accept, line, deny)
+
+            } else {
+                if (friend.isOnline) {
+                    val f = TextComponent(c("&eFriend request from ${friend.name}\n"))
+                    val accept = TextComponent(c("&a[ACCEPT]"))
+                    accept.hoverEvent = HoverEvent(
+                        HoverEvent.Action.SHOW_TEXT,
+                        ComponentBuilder(c("&aClick to accept the friend request")).create()
+                    )
+                    accept.clickEvent = ClickEvent(ClickEvent.Action.RUN_COMMAND, "/friends accept " + player.name)
+                    val line = TextComponent(c(" &9- "))
+                    val deny = TextComponent(c("&c[DENY]"))
+                    deny.hoverEvent = HoverEvent(
+                        HoverEvent.Action.SHOW_TEXT,
+                        ComponentBuilder(c("&cClick to deny the friend request")).create()
+                    )
+                    deny.clickEvent = ClickEvent(ClickEvent.Action.RUN_COMMAND, "/friends accept " + player.name)
+                    friend.player!!.spigot().sendMessage(f, accept, line, deny)
+                }
             }
 
 
         } else {
-            if(!dataHelper.exists(friend.uniqueId.toString())){
+            if (!dataHelper.exists(friend.uniqueId.toString())) {
                 player.sendMessage(Messages.GENERAL_PLAYER_NOT_FOUND.toString(friend))
                 return
             }
@@ -154,7 +172,14 @@ class FriendHelper : ChatUtil {
                 for (key: String in section.getKeys(false)) {
                     val permission: String = key
                     val max: Int = configManager.getFile("settings").config.getInt("max-friends.$key.max")
-                    if (!player.hasPermission(permission) && get("*", "friends", "UUID", player.uniqueId.toString(), "COUNT") as Int >= max) {
+                    if (!player.hasPermission(permission) && get(
+                            "*",
+                            "friends",
+                            "UUID",
+                            player.uniqueId.toString(),
+                            "COUNT"
+                        ) as Int >= max
+                    ) {
                         player.sendMessage(Messages.GENERAL_PLAYER_MAX_FRIENDS.toString())
                         return
                     }
@@ -193,9 +218,26 @@ class FriendHelper : ChatUtil {
                 )
             }
 
+            if(plugin.isBungecoordEnabled) {
+                val f = TextComponent(c("&eFriend request from ${player.name}\n"))
+                val accept = TextComponent(c("&a[ACCEPT]"))
+                accept.hoverEvent = HoverEvent(
+                    HoverEvent.Action.SHOW_TEXT,
+                    ComponentBuilder(c("&aClick to accept the friend request")).create()
+                )
+                accept.clickEvent = ClickEvent(ClickEvent.Action.RUN_COMMAND, "/friends accept " + player.name)
+                val line = TextComponent(c(" &9- "))
+                val deny = TextComponent(c("&c[DENY]"))
+                deny.hoverEvent = HoverEvent(
+                    HoverEvent.Action.SHOW_TEXT,
+                    ComponentBuilder(c("&cClick to deny the friend request")).create()
+                )
+                deny.clickEvent = ClickEvent(ClickEvent.Action.RUN_COMMAND, "/friends accept " + player.name)
+                bungeeHelper.sendMessage(player, friend.name.toString(), f, line, deny)
+            }
 
             if (friend.isOnline) {
-                val f = TextComponent(c("&eFriend request from ${friend.name}\n"))
+                val f = TextComponent(c("&eFriend request from ${player.name}\n"))
                 val accept = TextComponent(c("&a[ACCEPT]"))
                 accept.hoverEvent = HoverEvent(
                     HoverEvent.Action.SHOW_TEXT,
@@ -281,12 +323,10 @@ class FriendHelper : ChatUtil {
             val document: Document? = mongoHelper.getDatabase("requests")
                 .find(Document("Player", player.uniqueId.toString()).append("Friend", friend.uniqueId.toString()))
                 .first()
-            print(Bukkit.getOfflinePlayer(UUID.fromString(document?.getString("Player"))).uniqueId == player.uniqueId)
-            print(Bukkit.getOfflinePlayer(UUID.fromString(document?.getString("Friend"))).uniqueId == friend.uniqueId)
-            if (document == null) {
+/*            if (document == null) {
                 friend.sendMessage(Messages.GENERAL_FRIEND_NO_REQUEST.toString(player))
                 return
-            }
+            }*/
 
             val section: ConfigurationSection? =
                 configManager.getFile("settings").config.getConfigurationSection("max-friends")
@@ -355,7 +395,14 @@ class FriendHelper : ChatUtil {
                 for (key: String in section.getKeys(false)) {
                     val permission: String = key
                     val max: Int = configManager.getFile("settings").config.getInt("max-friends.$key.max")
-                    if (!friend.hasPermission(permission) && get("*", "friends", "UUID", friend.uniqueId.toString(), "COUNT") as Int >= max) {
+                    if (!friend.hasPermission(permission) && get(
+                            "*",
+                            "friends",
+                            "UUID",
+                            friend.uniqueId.toString(),
+                            "COUNT"
+                        ) as Int >= max
+                    ) {
                         friend.sendMessage(Messages.GENERAL_PLAYER_MAX_FRIENDS.toString())
                         return
                     }
@@ -374,8 +421,20 @@ class FriendHelper : ChatUtil {
             Bukkit.getPluginManager().callEvent(event)
             update("friends", "FRIENDS", playerListRaw, "UUID", player.uniqueId.toString())
             update("friends", "FRIENDS", friendListRaw, "UUID", friend.uniqueId.toString())
-            update("friends", "COUNT", (dataHelper.getFriendCount(player.uniqueId.toString()) + 1) , "UUID", player.uniqueId.toString())
-            update("friends", "COUNT", (dataHelper.getFriendCount(friend.uniqueId.toString()) + 1) , "UUID", friend.uniqueId.toString())
+            update(
+                "friends",
+                "COUNT",
+                (dataHelper.getFriendCount(player.uniqueId.toString()) + 1),
+                "UUID",
+                player.uniqueId.toString()
+            )
+            update(
+                "friends",
+                "COUNT",
+                (dataHelper.getFriendCount(friend.uniqueId.toString()) + 1),
+                "UUID",
+                friend.uniqueId.toString()
+            )
             if (player.isOnline) {
                 player.player?.sendMessage(Messages.GENERAL_FRIEND_REQUEST_ACCEPT.toString(friend));
             }
@@ -419,11 +478,10 @@ class FriendHelper : ChatUtil {
                 )
 
                 if (plugin.isBungecoordEnabled) {
-                    try {
-                        Messages.GENERAL_FRIEND_REMOVED_PLAYER2.toString(player)
-                            ?.let { bungeeHelper.sendMessage(friend.name.toString(), it) }
-                    } catch (ignored: NullPointerException) {
-                    }
+
+                    Messages.GENERAL_FRIEND_REMOVED_PLAYER2.toString(player)
+                        ?.let { bungeeHelper.sendMessage(player, friend.name.toString(), it) }
+
                 } else {
                     if (friend.isOnline) {
                         friend.player!!.sendMessage(Messages.GENERAL_FRIEND_REMOVED_PLAYER2.toString(player))
@@ -439,13 +497,13 @@ class FriendHelper : ChatUtil {
             var friendListRaw = dataHelper.getFriendListRaw(friend.uniqueId.toString())
             var playerListRaw = dataHelper.getFriendListRaw(player.uniqueId.toString())
 
-            if(!friendListRaw.contains(player.uniqueId.toString())){
+            if (!friendListRaw.contains(player.uniqueId.toString())) {
                 player.sendMessage(Messages.GENERAL_NOT_FRIEND.toString(friend));
                 return;
             }
 
             val event = FriendRemoveEvent(player, friend)
-            if(event.isCancelled) return
+            if (event.isCancelled) return
             plugin.server.pluginManager.callEvent(event)
             friendListRaw = friendListRaw.replace("${player.uniqueId};", "")
             playerListRaw = playerListRaw.replace("${friend.uniqueId};", "")
@@ -453,38 +511,62 @@ class FriendHelper : ChatUtil {
             update("friends", "FRIENDS", friendListRaw, "UUID", friend.uniqueId.toString())
             update("friends", "FRIENDS", playerListRaw, "UUID", player.uniqueId.toString())
             player.sendMessage(Messages.GENERAL_FRIEND_REMOVED_PLAYER1.toString(friend));
-            if (friend.isOnline) {
-                friend.player?.sendMessage(Messages.GENERAL_FRIEND_REMOVED_PLAYER2.toString(player));
+
+            if (plugin.isBungecoordEnabled) {
+
+                Messages.GENERAL_FRIEND_REMOVED_PLAYER2.toString(player)
+                    ?.let { bungeeHelper.sendMessage(player, friend.name.toString(), it) }
+
+            } else {
+                if (friend.isOnline) {
+                    friend.player!!.sendMessage(Messages.GENERAL_FRIEND_REMOVED_PLAYER2.toString(player))
+                }
             }
         }
     }
 
-    fun sendMessage(player: Player, friend: Player, message: String) {
-        if(player.uniqueId == friend.uniqueId){
+    fun sendMessage(player: Player, friend: OfflinePlayer, message: String) {
+        if (player.uniqueId == friend.uniqueId) {
             player.sendMessage(Messages.GENERAL_NOT_YOURSELF.toString())
             return
         }
 
-        if(plugin.isMongoConnected) {
-            val document: Document = mongoHelper.getDatabase("friends").find(Document("uuid", player.uniqueId.toString())).first()!!
-            if(document.getList("friends", String::class.java).contains(friend.uniqueId.toString())) {
+        if (plugin.isMongoConnected) {
+            val document: Document =
+                mongoHelper.getDatabase("friends").find(Document("uuid", player.uniqueId.toString())).first()!!
+            if (document.getList("friends", String::class.java).contains(friend.uniqueId.toString())) {
                 if (!dataHelper.isOnline(friend.uniqueId.toString())) {
                     player.sendMessage(Messages.GENERAL_FRIEND_OFFLINE.toString(friend));
                     return;
                 }
 
                 val event = FriendMessageEvent(player, friend, message)
-                if(event.isCancelled) return
+                if (event.isCancelled) return
 
                 player.sendMessage(Messages.MESSAGES_TO.toString(friend)!!.replace("%message%", message));
-                friend.sendMessage(Messages.MESSAGES_FROM.toString(player)!!.replace("%message%", message));
+                if (plugin.isBungecoordEnabled) {
+                    friend.name?.let {
+                        bungeeHelper.sendMessage(
+                            player,
+                            it,
+                            Messages.MESSAGES_FROM.toString(player)!!.replace("%message%", message)
+                        )
+                    }
+                } else {
+                    if (friend.isOnline) {
+                        friend.player!!.sendMessage(
+                            Messages.MESSAGES_FROM.toString(player)!!.replace("%message%", message)
+                        );
+
+                    }
+                }
                 plugin.server.pluginManager.callEvent(event)
-            }else {
+            } else {
                 player.sendMessage(Messages.GENERAL_NOT_FRIEND.toString(friend));
                 return;
             }
-        }else{
-            if(!dataHelper.getFriends(player.uniqueId.toString()).contains(friend.uniqueId.toString())) {
+        } else {
+            if (!dataHelper.getFriends(player.uniqueId.toString()).contains(friend.uniqueId.toString())) {
                 player.sendMessage(Messages.GENERAL_NOT_FRIEND.toString(friend));
                 return
             }
@@ -495,15 +577,27 @@ class FriendHelper : ChatUtil {
             }
 
             val event = FriendMessageEvent(player, friend, message)
-            if(event.isCancelled) return
+            if (event.isCancelled) return
 
             player.sendMessage(Messages.MESSAGES_TO.toString(friend)!!.replace("%message%", message));
-            friend.sendMessage(Messages.MESSAGES_FROM.toString(player)!!.replace("%message%", message));
-            plugin.server.pluginManager.callEvent(event)
+            if (plugin.isBungecoordEnabled) {
+                bungeeHelper.sendMessage(
+                    player,
+                    friend.name.toString(),
+                    Messages.MESSAGES_FROM.toString(player)!!.replace("%message%", message)
+                )
+            } else {
+                if (friend.isOnline) {
+                    friend.player!!.sendMessage(
+                        Messages.MESSAGES_FROM.toString(player)!!.replace("%message%", message)
+                    );
+                }
+                plugin.server.pluginManager.callEvent(event)
 
+            }
         }
-
     }
+
 
     private fun get(select: String, database: String, where: String, result: String, type: String): Any? {
         val rs: ResultSet =
@@ -521,6 +615,7 @@ class FriendHelper : ChatUtil {
     private fun update(database: String, set: String, setTo: String, where: String, result: String) {
         databaseManager.update("UPDATE $database SET $set='$setTo' WHERE $where='$result'")
     }
+
     private fun update(database: String, set: String, setTo: Int, where: String, result: String) {
         databaseManager.update("UPDATE $database SET $set='$setTo' WHERE $where='$result'")
     }
