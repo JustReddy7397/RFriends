@@ -99,7 +99,7 @@ class FriendHelper : ChatUtil {
             }
 
 
-            if (plugin.isBungecoordEnabled) {
+            if (friend.isOnline) {
                 val f = TextComponent(c("&eFriend request from ${friend.name}\n"))
                 val accept = TextComponent(c("&a[ACCEPT]"))
                 accept.hoverEvent = HoverEvent(
@@ -114,25 +114,8 @@ class FriendHelper : ChatUtil {
                     ComponentBuilder(c("&cClick to deny the friend request")).create()
                 )
                 deny.clickEvent = ClickEvent(ClickEvent.Action.RUN_COMMAND, "/friends accept " + player.name)
+                friend.player!!.spigot().sendMessage(f, accept, line, deny)
 
-            } else {
-                if (friend.isOnline) {
-                    val f = TextComponent(c("&eFriend request from ${friend.name}\n"))
-                    val accept = TextComponent(c("&a[ACCEPT]"))
-                    accept.hoverEvent = HoverEvent(
-                        HoverEvent.Action.SHOW_TEXT,
-                        ComponentBuilder(c("&aClick to accept the friend request")).create()
-                    )
-                    accept.clickEvent = ClickEvent(ClickEvent.Action.RUN_COMMAND, "/friends accept " + player.name)
-                    val line = TextComponent(c(" &9- "))
-                    val deny = TextComponent(c("&c[DENY]"))
-                    deny.hoverEvent = HoverEvent(
-                        HoverEvent.Action.SHOW_TEXT,
-                        ComponentBuilder(c("&cClick to deny the friend request")).create()
-                    )
-                    deny.clickEvent = ClickEvent(ClickEvent.Action.RUN_COMMAND, "/friends accept " + player.name)
-                    friend.player!!.spigot().sendMessage(f, accept, line, deny)
-                }
             }
 
 
@@ -216,24 +199,6 @@ class FriendHelper : ChatUtil {
                         )
                     })
                 )
-            }
-
-            if(plugin.isBungecoordEnabled) {
-                val f = TextComponent(c("&eFriend request from ${player.name}\n"))
-                val accept = TextComponent(c("&a[ACCEPT]"))
-                accept.hoverEvent = HoverEvent(
-                    HoverEvent.Action.SHOW_TEXT,
-                    ComponentBuilder(c("&aClick to accept the friend request")).create()
-                )
-                accept.clickEvent = ClickEvent(ClickEvent.Action.RUN_COMMAND, "/friends accept " + player.name)
-                val line = TextComponent(c(" &9- "))
-                val deny = TextComponent(c("&c[DENY]"))
-                deny.hoverEvent = HoverEvent(
-                    HoverEvent.Action.SHOW_TEXT,
-                    ComponentBuilder(c("&cClick to deny the friend request")).create()
-                )
-                deny.clickEvent = ClickEvent(ClickEvent.Action.RUN_COMMAND, "/friends accept " + player.name)
-                bungeeHelper.sendMessage(player, friend.name.toString(), f, line, deny)
             }
 
             if (friend.isOnline) {
@@ -477,15 +442,8 @@ class FriendHelper : ChatUtil {
                     Updates.set("count", (dataHelper.getFriendCount(player.uniqueId.toString()) - 1))
                 )
 
-                if (plugin.isBungecoordEnabled) {
-
-                    Messages.GENERAL_FRIEND_REMOVED_PLAYER2.toString(player)
-                        ?.let { bungeeHelper.sendMessage(player, friend.name.toString(), it) }
-
-                } else {
-                    if (friend.isOnline) {
-                        friend.player!!.sendMessage(Messages.GENERAL_FRIEND_REMOVED_PLAYER2.toString(player))
-                    }
+                if (friend.isOnline) {
+                    friend.player!!.sendMessage(Messages.GENERAL_FRIEND_REMOVED_PLAYER2.toString(player))
                 }
                 player.sendMessage(Messages.GENERAL_FRIEND_REMOVED_PLAYER1.toString(friend))
             } else {
@@ -511,16 +469,8 @@ class FriendHelper : ChatUtil {
             update("friends", "FRIENDS", friendListRaw, "UUID", friend.uniqueId.toString())
             update("friends", "FRIENDS", playerListRaw, "UUID", player.uniqueId.toString())
             player.sendMessage(Messages.GENERAL_FRIEND_REMOVED_PLAYER1.toString(friend));
-
-            if (plugin.isBungecoordEnabled) {
-
-                Messages.GENERAL_FRIEND_REMOVED_PLAYER2.toString(player)
-                    ?.let { bungeeHelper.sendMessage(player, friend.name.toString(), it) }
-
-            } else {
-                if (friend.isOnline) {
-                    friend.player!!.sendMessage(Messages.GENERAL_FRIEND_REMOVED_PLAYER2.toString(player))
-                }
+            if (friend.isOnline) {
+                friend.player!!.sendMessage(Messages.GENERAL_FRIEND_REMOVED_PLAYER2.toString(player))
             }
         }
     }
@@ -544,21 +494,12 @@ class FriendHelper : ChatUtil {
                 if (event.isCancelled) return
 
                 player.sendMessage(Messages.MESSAGES_TO.toString(friend)!!.replace("%message%", message));
-                if (plugin.isBungecoordEnabled) {
-                    friend.name?.let {
-                        bungeeHelper.sendMessage(
-                            player,
-                            it,
-                            Messages.MESSAGES_FROM.toString(player)!!.replace("%message%", message)
-                        )
-                    }
-                } else {
-                    if (friend.isOnline) {
-                        friend.player!!.sendMessage(
-                            Messages.MESSAGES_FROM.toString(player)!!.replace("%message%", message)
-                        );
 
-                    }
+                if (friend.isOnline) {
+                    friend.player!!.sendMessage(
+                        Messages.MESSAGES_FROM.toString(player)!!.replace("%message%", message)
+                    );
+
                 }
                 plugin.server.pluginManager.callEvent(event)
             } else {
@@ -580,21 +521,14 @@ class FriendHelper : ChatUtil {
             if (event.isCancelled) return
 
             player.sendMessage(Messages.MESSAGES_TO.toString(friend)!!.replace("%message%", message));
-            if (plugin.isBungecoordEnabled) {
-                bungeeHelper.sendMessage(
-                    player,
-                    friend.name.toString(),
-                    Messages.MESSAGES_FROM.toString(player)!!.replace("%message%", message)
-                )
-            } else {
-                if (friend.isOnline) {
-                    friend.player!!.sendMessage(
-                        Messages.MESSAGES_FROM.toString(player)!!.replace("%message%", message)
-                    );
-                }
-                plugin.server.pluginManager.callEvent(event)
 
+
+            if (friend.isOnline) {
+                friend.player!!.sendMessage(
+                    Messages.MESSAGES_FROM.toString(player)!!.replace("%message%", message)
+                );
             }
+            plugin.server.pluginManager.callEvent(event)
         }
     }
 

@@ -49,6 +49,7 @@
     <modules>
         <module>rfriends-spigot</module>
         <module>rfriends-bungeecord</module>
+        <module>rfriends-common</module>
     </modules>
     <dependencies>
     </dependencies>

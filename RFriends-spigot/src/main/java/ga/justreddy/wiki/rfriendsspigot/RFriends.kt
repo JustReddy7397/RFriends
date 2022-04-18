@@ -1,12 +1,14 @@
 package ga.justreddy.wiki.rfriendsspigot
 
+import ga.justreddy.wiki.rfriendscommon.spigot.DLoaderSpigot
+import ga.justreddy.wiki.rfriendscommon.spigot.base.Dependency
 import ga.justreddy.wiki.rfriendsspigot.events.PlayerJoinEvent
 import ga.justreddy.wiki.rfriendsspigot.exception.InvalidDatabaseException
 import ga.justreddy.wiki.rfriendsspigot.helpers.*
 import ga.justreddy.wiki.rfriendsspigot.helpers.command.CommandHelper
 import ga.justreddy.wiki.rfriendsspigot.tasks.RequestTask
+import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scheduler.BukkitTask
-import pluginlib.DependentJavaPlugin
 import wiki.justreddy.ga.reddyutils.config.ConfigManager
 import wiki.justreddy.ga.reddyutils.manager.DatabaseManager
 import wiki.justreddy.ga.reddyutils.menu.events.MenuEvent
@@ -18,12 +20,24 @@ lateinit var databaseManager: DatabaseManager
 lateinit var commandHelper: CommandHelper
 lateinit var mongoHelper: MongoHelper
 
-class RFriends : DependentJavaPlugin() {
+class RFriends : JavaPlugin() {
 
     var isMongoConnected: Boolean = false
     var isBungecoordEnabled: Boolean = false
 
     private val databaseTypes = arrayOf("mongodb", "sql", "mysql")
+
+    override fun onLoad() {
+        DLoaderSpigot.getInstance().onLoad(this);
+        DLoaderSpigot.getInstance().load(Dependency("kotlin-common", "1.6.20-RC", "org.jetbrains.kotlin", "kotlin-stdlib-common"))
+        DLoaderSpigot.getInstance().load(Dependency("kotlin-jdk8", "1.6.20-RC", "org.jetbrains.kotlin", "kotlin-stdlib-jdk8"))
+        DLoaderSpigot.getInstance().load(Dependency("kotlin", "1.6.20-RC", "org.jetbrains.kotlin", "kotlin-stdlib"))
+        DLoaderSpigot.getInstance().load(Dependency("mongo-driver", "3.12.10", "org.mongodb", "mongodb-driver"))
+        DLoaderSpigot.getInstance().load(Dependency("mongo-driver-core", "3.12.10", "org.mongodb", "mongodb-driver-core"))
+        DLoaderSpigot.getInstance().load(Dependency("bson", "4.4.0", "org.mongodb", "bson"))
+        DLoaderSpigot.getInstance().load(Dependency("h2", "1.4.200", "com.h2database", "h2"))
+        DLoaderSpigot.getInstance().load(Dependency("xseries", "8.6.1", "com.github.cryptomorin", "XSeries"))
+    }
 
     override fun onEnable() {
         // Plugin startup logic
@@ -34,13 +48,6 @@ class RFriends : DependentJavaPlugin() {
         configManager.registerFile(this, "database", "database")
         configManager.registerFile(this, "messages", "messages")
         configManager.registerFile(this, "settings", "settings")
-        /*       val match = Arrays.stream(databaseTypes).anyMatch(configManager.getFile("database").config.getString("storage")?.lowercase())
-               if(!match){
-                   throw InvalidDatabaseException()
-               }
-
-
-       */
         val type: String = configManager.getFile("database").config.getString("storage")?.lowercase()!!
         val match = Arrays.stream(databaseTypes).anyMatch(type::contains)
         if (!match) throw InvalidDatabaseException()

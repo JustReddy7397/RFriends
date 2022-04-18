@@ -33,18 +33,5 @@ class BungeeHelper : ChatUtil {
     }
 
 
-    fun sendMessage(player: Player, name: String, vararg textComponents: TextComponent) {
-        if (name.isEmpty()) return
-        if(textComponents.isEmpty()) return
-
-        val out: ByteArrayDataOutput = ByteStreams.newDataOutput()
-        out.writeUTF("Message")
-        out.writeUTF(name)
-        out.writeUTF(c(textComponents.contentToString()))
-
-        plugin.server.messenger.registerOutgoingPluginChannel(plugin, "BungeeCord")
-        player.sendPluginMessage(plugin, "BungeeCord", out.toByteArray())
-    }
-
 
 }
