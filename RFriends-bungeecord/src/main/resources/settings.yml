@@ -1,0 +1,9 @@
+# If true, it will show the LuckPerms prefix of everyone
+# Example: [ADMIN] JustReddy has sent you a friend request.
+# If false, it will show: JustReddy has sent you a friend request.
+# Note: This is for most messages, not all.
+# Another Note: This is bungeecord, so LuckPermsBungee is required.
+# Last but not least: Changing this requires a proxy restart!
+use-luckperms-prefix: false
+
+request-time: "5m" # 5m ( 5 minutes ) is default, you can also do: 1h20m ( 1 hour and 20 minutes ):D

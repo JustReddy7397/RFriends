@@ -1,0 +1,12 @@
+name: RFriends
+version: '${project.version}'
+main: ga.justreddy.wiki.rfriends.RFriendsBungeeCord
+author: JustReddy
+description: Bungeecord version of RFriends
+softDepends:
+  - LuckPerms
+libraries:
+  - org.xerial:sqlite-jdbc:3.34.0
+  - org.mongodb:mongodb-driver:3.12.11
+  - org.mongodb:mongodb-driver-core:3.12.11
+  - org.mongodb:bson:3.12.11

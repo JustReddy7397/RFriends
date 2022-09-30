@@ -1,0 +1,11 @@
+name: RFriends
+version: '${project.version}'
+main: ga.justreddy.wiki.rfriends.RFriendsSpigot
+api-version: 1.19
+authors: [ JustReddy ]
+description: Spigot version of RFriends
+libraries:
+  - org.xerial:sqlite-jdbc:3.34.0
+  - org.mongodb:mongodb-driver:3.12.11
+  - org.mongodb:mongodb-driver-core:3.12.11
+  - org.mongodb:bson:3.12.11

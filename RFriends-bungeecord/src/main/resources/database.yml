@@ -1,0 +1,16 @@
+# Available storage types:
+# sql ( Recommend )
+# mysql ( For cross server storage )
+# mongodb ( Easily editable )
+# yaml ( Recommended if u want to edit friends via your file manager )
+storage: sql
+
+mongo:
+  uri: ""
+
+mysql:
+  host: "0.0.0.0"
+  port: 3306
+  username: "rfriends"
+  password: "qwerty"
+  database: "rhomes"

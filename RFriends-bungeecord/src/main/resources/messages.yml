@@ -1,0 +1,55 @@
+
+#    __  __ ______  _____ _____         _____ ______  _____
+#   |  \/  |  ____|/ ____/ ____|  /\   / ____|  ____|/ ____|
+#   | \  / | |__  | (___| (___   /  \ | |  __| |__  | (___
+#   | |\/| |  __|  \___ \\___ \ / /\ \| | |_ |  __|  \___ \
+#   | |  | | |____ ____) |___) / ____ \ |__| | |____ ____) |
+#   |_|  |_|______|_____/_____/_/    \_\_____|______|_____/
+#
+# RFriends by JustReddy
+# WIKI: TODO
+
+error:
+  no-permission: "&cYou don't have the permission to execute this command"
+  offline: "&cThis player is not online."
+  already-friends: "&cYou're already friends with this person"
+  not-friends: "&cYou're not friends with this player"
+  max-friends-recipient: "&cYou can't send this player a friend request, because this player has the max amount of friends"
+  max-friends-sender: "&cYou can't send this player a friend request, because you have the max amount of friends"
+  friend-request-disabled: "&cThis player has friend requests disabled"
+  not-yourself: "&cYou can't befriend yourself :("
+  invalid-arguments: "&cInvalid arguments! <syntax>"
+  no-request: "&cYou've not gotten a friend request from this person"
+
+friend-message:
+  to: "&dTo: &6<recipient>&r: &7<message>"
+  from: "&dFrom: &6<sender>&r: &7<message>"
+
+friend-request:
+  sent:
+    - "&m&d------------------------------"
+    - "&aSent a friend request to <recipient>"
+    - "&aThey have 5 minutes to accept"
+    - "&m&d------------------------------"
+  received:
+    text:
+      - "&m&d------------------------------"
+      - "&6<sender> &6has sent you a friend request."
+      - "<buttons>" # The buttons that are specified below.
+      - "&m&d------------------------------"
+    buttons: # You can add as many as you want.
+      accept:
+        text: "&a[ACCEPT]"
+        click:
+          action: RUN_COMMAND # Actions: RUN_COMMAND, SUGGEST_COMMAND, CHANGE_PAGE, COPY_TO_CLIPBOARD, OPEN_FILE, OPEN_URL
+          value: "/friend accept <recipient>" # Accepts the friend request
+      hyphen: # This is to make it look nicer: [ACCEPT] - [DENY]
+        text: "&7-"
+      deny:
+        text: "&c[DENY]"
+        click:
+          action: RUN_COMMAND
+          value: "/friends deny <recipient>"
+
+
+
